@@ -1,0 +1,53 @@
+#TODO
+# Ajouter la détection d'un gagnant
+# Afficher à qui est le tour actuel
+# Créer IA MinMax
+# Créer IA avec deep learning
+# Créer la méthode de calcul de "connectivité" d'un plateau
+
+
+
+import pygame
+from hex.constants import WIDTH, HEIGHT, BLUE, HEX_SIZE
+from hex.game import Game
+
+FPS = 60
+
+pygame.init()
+
+window = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption('Hex')
+
+def get_row_col_from_mouse(pos):
+    (x,y) = pos
+    row = y // HEX_SIZE
+    col =  int((x-(row-1)*HEX_SIZE/2-1) // HEX_SIZE)
+    return row, col
+
+def main():
+    run = True
+    game = Game(window)
+    clock = pygame.time.Clock()
+
+    while run:
+
+        events = pygame.event.get()
+
+        if game.winner() != None:
+            print(game.winner())
+            run = False
+
+        for event in events:
+            if event.type == pygame.QUIT:
+                run = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                row, col = get_row_col_from_mouse(pos)
+                game.select(row, col)
+
+        game.update()
+        clock.tick(FPS)
+    pygame.quit()
+
+main()

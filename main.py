@@ -4,7 +4,7 @@
 # Créer IA MinMax
 # Créer IA avec deep learning
 # Créer la méthode de calcul de "connectivité" d'un plateau
-
+# Ajouter de l'audio
 
 
 import pygame
@@ -19,6 +19,19 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Hex')
 
 def get_row_col_from_mouse(pos):
+    """
+    Convert the position where the mouse clicked to a number of row and column.
+
+    Parameters
+    ----------
+    pos : [type]
+        [description]
+
+    Returns
+    -------
+    tuple of int
+        Row and column where the mouse clicked
+    """
     (x,y) = pos
     row = y // HEX_SIZE
     col =  int((x-(row-1)*HEX_SIZE/2-1) // HEX_SIZE)
@@ -34,6 +47,8 @@ def main():
         events = pygame.event.get()
 
         if game.winner() != None:
+            #TODO Showing the winner
+            #TODO Proposing another game
             print(game.winner())
             run = False
 

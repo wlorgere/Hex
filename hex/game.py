@@ -70,12 +70,12 @@ class Game:
         pos = (row-1)*COL + (col-1)
 
         #Change the color of the played cell in the trees
-        self.board.trees.trees[pos]["color"] = self.turn
+        self.board.connections.trees[pos]["color"] = self.turn
         #Find the neighbours of the played cell
         neighbours = self.board.neighbours(row, col)
 
         for x in neighbours:
-            self.board.trees.union(x, pos)
+            self.board.connections.union(x, pos)
 
     def winner(self):
         """
@@ -86,6 +86,8 @@ class Game:
         tuple of int
             Winner of the game
         """
+
+        
         return self.board.winner()
 
 

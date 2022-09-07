@@ -2,6 +2,7 @@ import pygame
 from .constants import BLACK, WHITE, RED, BLUE, HEX_SIZE, ROW, COL
 from .connections import Connections
 
+#TODO put all neighbors in cache, so we don't have to recompute them everytime§
 
 class Board:
     """
@@ -17,7 +18,7 @@ class Board:
         Number of rows
     col : int
         Number of columns
-    trees : Connections
+    connections : Connections
         A representation of the connections between cells, using trees.
     """
     def __init__(self, row, col):
@@ -25,7 +26,7 @@ class Board:
         self.row = row
         self.col = col
         self.create_board()
-        self.trees = Connections(row, col)
+        self.connections = Connections(row, col)
 
     def create_board(self):
         """
@@ -83,9 +84,9 @@ class Board:
         tuple of int
             The color of the winner
         """
-        if self.graph.arbres[COL*ROW]["parent"] == self.graph.arbres[COL*ROW + 1]["parent"]:
+        if self.connections.trees[COL*ROW]["parent"] == self.connections.trees[COL*ROW + 1]["parent"]:
             return BLUE
-        if self.graph.arbres[COL*ROW + 2]["parent"] == self.graph.arbres[COL*ROW + 3]["parent"]:
+        if self.connections.trees[COL*ROW + 2]["parent"] == self.connections.trees[COL*ROW + 3]["parent"]:
             return RED
         return None
 

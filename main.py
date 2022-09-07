@@ -15,6 +15,8 @@ FPS = 60
 
 pygame.init()
 
+players = {"RED": "human", "BLUE": "human"}
+
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Hex')
 
@@ -43,23 +45,26 @@ def main():
     clock = pygame.time.Clock()
 
     while run:
+        
 
-        events = pygame.event.get()
-
-        if game.winner() != None:
+        winner = game.winner()
+        if winner != None:
             #TODO Showing the winner
             #TODO Proposing another game
-            print(game.winner())
+            print(winner)
             run = False
+        if players[game.turn] == "human":
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.QUIT:
+                    run = False
 
-        for event in events:
-            if event.type == pygame.QUIT:
-                run = False
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                row, col = get_row_col_from_mouse(pos)
-                game.select(row, col)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = pygame.mouse.get_pos()
+                    row, col = get_row_col_from_mouse(pos)
+                    game.select(row, col)
+        if players[game.turn] == "Minmax":
+            pass
 
         game.update()
         clock.tick(FPS)

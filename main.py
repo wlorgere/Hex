@@ -46,18 +46,19 @@ def main():
 
     while run:
         
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT:
+                run = False
 
         winner = game.winner()
+
         if winner != None:
             #TODO Showing the winner
             #TODO Proposing another game
             print(winner)
             run = False
         if players[game.turn] == "human":
-            events = pygame.event.get()
-            for event in events:
-                if event.type == pygame.QUIT:
-                    run = False
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()

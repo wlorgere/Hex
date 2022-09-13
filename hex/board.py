@@ -1,5 +1,5 @@
 import pygame
-from .constants import BLACK, WHITE, RED, BLUE, HEX_SIZE, ROW, COL
+from .constants import BLACK, COLORS, WHITE, RED, BLUE, HEX_SIZE, ROW, COL
 from .connections import Connections
 
 #TODO put all neighbors in cache, so we don't have to recompute them everytime§
@@ -28,13 +28,41 @@ class Board:
         self.create_board()
         self.connections = Connections(row, col)
 
+    def __repr__(self):
+        return self.board.__repr__()
+
     def create_board(self):
         """
         Initialize the board with all black cells.
         """
-        self.board = [[BLACK for _ in range(self.col)] for _ in range(self.row)]
+        self.board = [["BLACK" for _ in range(self.col)] for _ in range(self.row)]
 
+    def move(self, row, col, turn):
+        self.board[row][col] = turn
+        self.union(row, col, turn)
 
+    def union(self, row, col, turn):
+        """
+        Update the connections on the board by making union with the neighbours
+        of the played cell.
+
+        Parameters
+        ----------
+        row : int
+            Row of the played cell
+        col : int
+            Column of the played cell
+        """
+        pos = row*COL + col
+
+        #Change the color of the played cell in the trees
+        self.connections.trees[pos]["color"] = turn
+        #Find the neighbours of the played cell
+        neighbours = self.neighbours(row, col)
+
+        for x in neighbours:
+            self.connections.union(x, pos)
+    
     def neighbours(self, row, col):
         """
         Find the neighbours of a cell.
@@ -54,22 +82,22 @@ class Board:
         res = set()
 
         #Ajout des bords
-        if row == 1:
+        if row == 0:
             res.add(ROW*COL)
-        if row == ROW:
+        if row == ROW-1:
             res.add(ROW*COL + 1)
-        if col == 1:
+        if col == 0:
             res.add(ROW*COL + 2)
-        if col == COL:
+        if col == COL-1:
             res.add(ROW*COL + 3)
 
         #Ajout des voisins
         for x2 in range(row-1, row+2):
             for y2 in range(col-1, col+2):
                 if ((row != x2 or col != y2)
-                    and (0 < x2 <= ROW)
-                    and (0 < y2 <= COL)):
-                    res.add((x2-1)*COL + (y2-1))
+                    and (0 <= x2 < ROW)
+                    and (0 <= y2 < COL)):
+                    res.add(x2*COL + y2)
 
         return res
 
@@ -85,9 +113,9 @@ class Board:
             The color of the winner
         """
         if self.connections.trees[COL*ROW]["parent"] == self.connections.trees[COL*ROW + 1]["parent"]:
-            return BLUE
+            return "BLUE"
         if self.connections.trees[COL*ROW + 2]["parent"] == self.connections.trees[COL*ROW + 3]["parent"]:
-            return RED
+            return "RED"
         return None
 
     def draw_hex(self, window):
@@ -132,7 +160,7 @@ class Board:
         """
         for row in range(self.row):
             for col in range(self.col):
-                pygame.draw.rect(window, self.board[row][col], (((col+row/2+1)*HEX_SIZE), (row+1)*HEX_SIZE, HEX_SIZE, HEX_SIZE))
+                pygame.draw.rect(window, COLORS[self.board[row][col]], (((col+row/2+1)*HEX_SIZE), (row+1)*HEX_SIZE, HEX_SIZE, HEX_SIZE))
                 pygame.draw.rect(window, WHITE, (((col+row/2+1)*HEX_SIZE), (row+1)*HEX_SIZE, HEX_SIZE, HEX_SIZE), 1)
 
 

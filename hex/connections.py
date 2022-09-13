@@ -11,11 +11,14 @@ class Connections:
     """
 
     def __init__(self, row, col):
-        self.trees = [{"parent": i, "num_child": 0, "color": BLACK} for i in range(row*col+4)]
-        self.trees[row*col]["color"] = BLUE
-        self.trees[row*col + 1]["color"] = BLUE
-        self.trees[row*col + 2]["color"] = RED
-        self.trees[row*col + 3]["color"] = RED
+        self.trees = [{"parent": i, "num_child": 0, "color": "BLACK"} for i in range(row*col+4)]
+        self.trees[row*col]["color"] = "BLUE"
+        self.trees[row*col + 1]["color"] = "BLUE"
+        self.trees[row*col + 2]["color"] = "RED"
+        self.trees[row*col + 3]["color"] = "RED"
+
+    def __repr__(self):
+        return self.trees.__repr__()
 
     def find_root(self, x):
         """Find the root of the node x, using a recursive approch
@@ -59,3 +62,10 @@ class Connections:
                 self.trees[yRoot]["parent"] = xRoot
                 if self.trees[xRoot]["num_child"] == self.trees[yRoot]["num_child"]:
                     self.trees[xRoot]["num_child"] += 1
+
+        self.flatten()
+    
+    def flatten(self):
+        """Flatten the tree by passing the root as the parent for each node"""
+        for i in range(len(self.trees)):
+            self.trees[i]["parent"] = self.find_root(i)

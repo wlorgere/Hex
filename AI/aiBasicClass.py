@@ -1,8 +1,6 @@
-class AIBasicClass():
-    def __init__(self, board, turn) -> None:
-        self.board = board
-        self.turn = turn
+from hex.board import Board
 
-    def find_best_move(self):
+
+class AIBasicClass():
+    def find_best_move(self, board, turn):
         pass
-    

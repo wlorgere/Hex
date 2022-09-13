@@ -8,14 +8,15 @@
 
 
 import pygame
-from hex.constants import WIDTH, HEIGHT, BLUE, HEX_SIZE
+from AI.minmax import Minmax
+from hex.constants import WIDTH, HEIGHT, HEX_SIZE
 from hex.game import Game
 
 FPS = 60
 
 pygame.init()
 
-players = {"RED": "human", "BLUE": "human"}
+players = {"RED": "Minmax", "BLUE": "human"}
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Hex')
@@ -44,6 +45,10 @@ def main():
     game = Game(window)
     clock = pygame.time.Clock()
 
+    if "Minmax" in players.values():
+        print("yay, AI")
+        ai = Minmax()
+
     while run:
         
         events = pygame.event.get()
@@ -58,14 +63,19 @@ def main():
             #TODO Proposing another game
             print(winner)
             run = False
-        if players[game.turn] == "human":
 
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    pos = pygame.mouse.get_pos()
-                    row, col = get_row_col_from_mouse(pos)
-                    game.select(row, col)
+        if players[game.turn] == "human":
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                row, col = get_row_col_from_mouse(pos)
+                game.select(row, col)
+
         if players[game.turn] == "Minmax":
-            pass
+            print("AI turn")
+            res = ai.find_best_move(game.board, game.turn)
+            print(res)
+            row, col = res
+            game.select(row, col)
 
         game.update()
         clock.tick(FPS)

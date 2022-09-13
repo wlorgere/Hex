@@ -1,6 +1,6 @@
 import pygame
 from .board import Board
-from .constants import ROW, COL, RED, BLACK, BLUE
+from .constants import ROW, COL
 
 class Game:
     """
@@ -18,7 +18,7 @@ class Game:
 
     def __init__(self, window):
         self.board = Board(ROW, COL)
-        self.turn = RED
+        self.turn = "RED"
         self.window = window
 
     def update(self):
@@ -43,39 +43,16 @@ class Game:
         #Check if the selected cell is inside the board
         in_board = (1 <= row <= ROW) and (1 <= col <= COL)
         if (in_board
-                and self.board.board[row-1][col-1] == BLACK):
+                and self.board.board[row-1][col-1] == "BLACK"):
             #Place a piece on the board
-            self.board.board[row-1][col-1] = self.turn
-            #Update the connections on the board
-            self.union(row, col)
+            self.board.move(row-1,col-1,self.turn)
+            
             #Change turn
             self.change_turn()
         else:
             #TODO print a message to tell the player to chose a correct cell
             pass
 
-
-    def union(self, row, col):
-        """
-        Update the connections on the board by making union with the neighbours
-        of the played cell.
-
-        Parameters
-        ----------
-        row : int
-            Row of the played cell
-        col : int
-            Column of the played cell
-        """
-        pos = (row-1)*COL + (col-1)
-
-        #Change the color of the played cell in the trees
-        self.board.connections.trees[pos]["color"] = self.turn
-        #Find the neighbours of the played cell
-        neighbours = self.board.neighbours(row, col)
-
-        for x in neighbours:
-            self.board.connections.union(x, pos)
 
     def winner(self):
         """
@@ -87,7 +64,6 @@ class Game:
             Winner of the game
         """
 
-        
         return self.board.winner()
 
 
@@ -95,7 +71,7 @@ class Game:
         """
         Change the player's turn.
         """
-        if self.turn == RED:
-            self.turn = BLUE
+        if self.turn == "RED":
+            self.turn = "BLUE"
         else:
-            self.turn = RED
+            self.turn = "RED"

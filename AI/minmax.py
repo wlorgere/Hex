@@ -3,11 +3,11 @@ from AI.aiBasicClass import AIBasicClass
 from hex.board import Board
 class Minmax(AIBasicClass):
     def find_best_move(self, board: Board, turn):
-        def recursion(board: Board, player):
+        def recursion(board: Board, player, debug=False):
             winner = board.winner()
 
             if winner != None:
-                return (-1 if winner == player else 1, None)
+                return (1 if winner == player else -1, None)
 
             value = float("-inf")
 
@@ -21,14 +21,20 @@ class Minmax(AIBasicClass):
                         eval, move  = recursion(current_board, player)
                         eval = - eval
                         test[i][j] = eval
+
                         if eval > value:
+                            if debug:
+                                print("change move", value, eval, i, j)
                             value = eval
                             move = i,j
 
+            if debug:
+                print("test", test)
+                print("move", move)
             return eval, move
         
-        eval, move = recursion(board, turn)
+        eval, move = recursion(board, turn, True)
 
-        
+
         return move
 

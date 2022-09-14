@@ -41,11 +41,11 @@ class Game:
             Column of the cell
         """
         #Check if the selected cell is inside the board
-        in_board = (1 <= row <= ROW) and (1 <= col <= COL)
+        in_board = (0 <= row <= ROW-1) and (0 <= col <= COL-1)
         if (in_board
-                and self.board.board[row-1][col-1] == "BLACK"):
+                and self.board.board[row][col] == "BLACK"):
             #Place a piece on the board
-            self.board.move(row-1,col-1,self.turn)
+            self.board.move(row,col,self.turn)
             
             #Change turn
             self.change_turn()

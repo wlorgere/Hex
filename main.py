@@ -36,8 +36,9 @@ def get_row_col_from_mouse(pos):
         Row and column where the mouse clicked
     """
     (x,y) = pos
-    row = y // HEX_SIZE
-    col =  int((x-(row-1)*HEX_SIZE/2-1) // HEX_SIZE)
+    row = y // HEX_SIZE - 1
+    col =  int((x-(row+2)*HEX_SIZE/2-1) // HEX_SIZE)
+    print("clicked", row, col)
     return row, col
 
 def main():
@@ -49,6 +50,7 @@ def main():
         print("yay, AI")
         ai = Minmax()
 
+    game.update()
     while run:
         
         events = pygame.event.get()
@@ -61,8 +63,9 @@ def main():
         if winner != None:
             #TODO Showing the winner
             #TODO Proposing another game
-            print(winner)
+            print("winner", winner)
             run = False
+            break
 
         if players[game.turn] == "human":
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -81,4 +84,5 @@ def main():
         clock.tick(FPS)
     pygame.quit()
 
-main()
+if __name__=="__main__":
+    main()

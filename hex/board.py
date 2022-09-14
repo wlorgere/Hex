@@ -76,7 +76,7 @@ class Board:
 
         Returns
         -------
-        set of tuples of int
+        set of int
             A set containing all the cells that are neighbours of the given cell
         """
         res = set()
@@ -91,13 +91,33 @@ class Board:
         if col == COL-1:
             res.add(ROW*COL + 3)
 
-        #Ajout des voisins
-        for x2 in range(row-1, row+2):
-            for y2 in range(col-1, col+2):
-                if ((row != x2 or col != y2)
-                    and (0 <= x2 < ROW)
-                    and (0 <= y2 < COL)):
-                    res.add(x2*COL + y2)
+        possibleNeighbours = {(row-1,col), (row-1, col+1), (row, col-1), (row, col+1), (row+1, col-1), (row+1, col)}
+        for (x2, y2) in possibleNeighbours:
+            if ((0 <= x2 < ROW)
+                and (0 <= y2 < COL)):
+                res.add(x2*COL + y2)
+
+        return res
+
+    def neighboursXY(self, row, col):
+        print("neighbours of", row, col)
+        res = set()
+
+        #Ajout des bords
+        if row == 0:
+            res.add(ROW*COL)
+        if row == ROW-1:
+            res.add(ROW*COL + 1)
+        if col == 0:
+            res.add(ROW*COL + 2)
+        if col == COL-1:
+            res.add(ROW*COL + 3)
+
+        possibleNeighbours = {(row-1,col), (row-1, col+1), (row, col-1), (row, col+1), (row+1, col-1), (row+1, col)}
+        for (x2, y2) in possibleNeighbours:
+            if ((0 <= x2 < ROW)
+                and (0 <= y2 < COL)):
+                res.add((x2, y2))
 
         return res
 

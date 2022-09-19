@@ -9,10 +9,8 @@
 
 import pygame
 from AI.minmax import Minmax
-from hex.constants import WIDTH, HEIGHT, HEX_SIZE
+from hex.constants import FPS, WIDTH, HEIGHT, HEX_SIZE
 from hex.game import Game
-
-FPS = 60
 
 pygame.init()
 
@@ -75,7 +73,7 @@ def main():
 
         if players[game.turn] == "Minmax":
             print("AI turn")
-            res = ai.find_best_move(game.board, game.turn)
+            res = ai.find_best_move(game.board, game.turn, window, clock)
             print(res)
             row, col = res
             game.select(row, col)

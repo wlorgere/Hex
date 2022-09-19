@@ -1,5 +1,5 @@
 import pygame
-from .constants import BLACK, COLORS, WHITE, RED, BLUE, HEX_SIZE, ROW, COL
+from .constants import BLACK, COLORS, GREEN, WHITE, RED, BLUE, HEX_SIZE, ROW, COL
 from .connections import Connections
 
 #TODO put all neighbors in cache, so we don't have to recompute them everytime§
@@ -148,26 +148,37 @@ class Board:
             The window to display the game.
         """
         window.fill(BLACK)
+        myfont = pygame.font.SysFont("monospace", 15)
+
+
 
         # Cotés bleus
         for col in range(self.col+1):
             # Haut
             pygame.draw.rect(window, BLUE, ((col+1/2)*HEX_SIZE, 0, HEX_SIZE, HEX_SIZE))
             pygame.draw.rect(window, WHITE, ((col+1/2)*HEX_SIZE, 0, HEX_SIZE, HEX_SIZE), 1)
+            label = myfont.render(str(self.connections.trees[ROW*COL]["parent"]), 1, GREEN)
+            window.blit(label, ((col+1/2)*HEX_SIZE, 0, HEX_SIZE, HEX_SIZE))
 
             # Bas
             pygame.draw.rect(window, BLUE, ((self.col/2 + col)*HEX_SIZE, (self.row+1)*HEX_SIZE, HEX_SIZE, HEX_SIZE))
             pygame.draw.rect(window, WHITE, ((self.col/2 + col)*HEX_SIZE, (self.row+1)*HEX_SIZE, HEX_SIZE, HEX_SIZE), 1)
+            label = myfont.render(str(self.connections.trees[ROW*COL+1]["parent"]), 1, GREEN)
+            window.blit(label,  ((self.col/2 + col)*HEX_SIZE, (self.row+1)*HEX_SIZE, HEX_SIZE, HEX_SIZE))
 
         # Cotés rouges
         for row in range(self.row):
             # Gauche
             pygame.draw.rect(window, RED, (row/2 * HEX_SIZE, (row+1) * HEX_SIZE, HEX_SIZE, HEX_SIZE))
             pygame.draw.rect(window, WHITE, (row/2 * HEX_SIZE, (row+1) * HEX_SIZE, HEX_SIZE, HEX_SIZE),1)
+            label = myfont.render(str(self.connections.trees[ROW*COL+2]["parent"]), 1, GREEN)
+            window.blit(label,(row/2 * HEX_SIZE, (row+1) * HEX_SIZE, HEX_SIZE, HEX_SIZE))
 
             #Droite
             pygame.draw.rect(window, RED, ((self.col+1 + row/2) * HEX_SIZE, (row+1) * HEX_SIZE, HEX_SIZE, HEX_SIZE))
             pygame.draw.rect(window, WHITE, ((self.col+1 + row/2) * HEX_SIZE, (row+1) * HEX_SIZE, HEX_SIZE, HEX_SIZE),1)
+            label = myfont.render(str(self.connections.trees[ROW*COL+3]["parent"]), 1, GREEN)
+            window.blit(label, ((self.col+1 + row/2) * HEX_SIZE, (row+1) * HEX_SIZE, HEX_SIZE, HEX_SIZE))
 
     def draw_pieces(self, window):
         """
@@ -178,10 +189,14 @@ class Board:
         window
             The window to display the game.
         """
+        myfont = pygame.font.SysFont("monospace", 15)
+
         for row in range(self.row):
             for col in range(self.col):
                 pygame.draw.rect(window, COLORS[self.board[row][col]], (((col+row/2+1)*HEX_SIZE), (row+1)*HEX_SIZE, HEX_SIZE, HEX_SIZE))
                 pygame.draw.rect(window, WHITE, (((col+row/2+1)*HEX_SIZE), (row+1)*HEX_SIZE, HEX_SIZE, HEX_SIZE), 1)
+                label = myfont.render(str(self.connections.trees[row*COL + col]["parent"]), 1, GREEN)
+                window.blit(label, (((col+row/2+1)*HEX_SIZE), (row+1)*HEX_SIZE, HEX_SIZE, HEX_SIZE))
 
 
     def draw(self, window):

@@ -4,6 +4,7 @@ HEX_SIZE = 50
 WIDTH = ((COL+1)*3//2)*HEX_SIZE
 HEIGHT = (ROW + 2)*HEX_SIZE
 
+FPS = 60
 
 
 BLACK = (0,0,0)

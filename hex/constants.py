@@ -1,5 +1,5 @@
-ROW = 3
-COL = 3
+ROW = 4
+COL = 4
 HEX_SIZE = 50
 WIDTH = ((COL+1)*3//2)*HEX_SIZE
 HEIGHT = (ROW + 2)*HEX_SIZE

@@ -1,12 +1,11 @@
 from copy import deepcopy
 from AI.aiBasicClass import AIBasicClass
 from hex.board import Board
-import pygame
 
 from hex.constants import FPS, HEIGHT, WIDTH
-class Minmax(AIBasicClass):
+class AlphaBeta(AIBasicClass):
     def find_best_move(self, board: Board, turn):
-        def recursion(board: Board, player, debug=False):
+        def recursion(board: Board, player, alpha, beta, debug=False):
             winner = board.winner()
 
             if winner != None:
@@ -23,7 +22,7 @@ class Minmax(AIBasicClass):
                     if(board.board[i][j] == "BLACK"):
                         currentBoard = deepcopy(board)
                         currentBoard.move(i, j, player)
-                        eval, move  = recursion(currentBoard, nextPlayer)
+                        eval, move  = recursion(currentBoard, nextPlayer, -beta, -alpha)
                         eval = -eval
                         test[i][j] = eval
                         if eval > value:
@@ -31,6 +30,11 @@ class Minmax(AIBasicClass):
                                 print("change move", value, eval, i, j)
                             value = eval
                             nextMove = i,j
+                        alpha = max(alpha, value)
+                        if alpha > beta:
+                            break
+                if alpha > beta:
+                    break
 
 
             if debug:
@@ -38,7 +42,7 @@ class Minmax(AIBasicClass):
                 print("move", nextMove)
             return value, nextMove
         
-        eval, move = recursion(board, turn, True)
+        eval, move = recursion(board, turn, float("-inf"), float("inf"), True)
 
 
         return move

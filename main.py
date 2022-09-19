@@ -1,20 +1,20 @@
 #TODO
-# Ajouter la détection d'un gagnant
 # Afficher à qui est le tour actuel
-# Créer IA MinMax
 # Créer IA avec deep learning
 # Créer la méthode de calcul de "connectivité" d'un plateau
-# Ajouter de l'audio
 
 
 import pygame
+from AI.alphaBeta import AlphaBeta
 from AI.minmax import Minmax
+from AI.transposition import Transposition
 from hex.constants import FPS, WIDTH, HEIGHT, HEX_SIZE
 from hex.game import Game
+from time import time
 
 pygame.init()
 
-players = {"RED": "Minmax", "BLUE": "human"}
+players = {"RED": "Transposition", "BLUE": "human"}
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Hex')
@@ -46,7 +46,14 @@ def main():
 
     if "Minmax" in players.values():
         print("yay, AI")
-        ai = Minmax()
+        aiMinimax = Minmax()
+    if "AlphaBeta" in players.values():
+        print("yay, AI")
+        aiAlphaBeta = AlphaBeta()
+    if "Transposition" in players.values():
+        print("yay, AI")
+        aiTransposition = Transposition()
+    
 
     game.update()
     while run:
@@ -73,10 +80,34 @@ def main():
 
         if players[game.turn] == "Minmax":
             print("AI turn")
-            res = ai.find_best_move(game.board, game.turn, window, clock)
+            t1 = time()
+            res = aiMinimax.find_best_move(game.board, game.turn)
+            t2 = time()
             print(res)
+            print("found in",t2-t1, "seconds")
             row, col = res
             game.select(row, col)
+
+        if players[game.turn] == "AlphaBeta":
+            print("AI turn")
+            t1 = time()
+            res = aiAlphaBeta.find_best_move(game.board, game.turn)
+            t2 = time()
+            print(res)
+            print("found in",t2-t1, "seconds")
+            row, col = res
+            game.select(row, col)
+
+        if players[game.turn] == "Transposition":
+            print("AI turn")
+            t1 = time()
+            res = aiTransposition.find_best_move(game.board, game.turn)
+            t2 = time()
+            print(res)
+            print("found in",t2-t1, "seconds")
+            row, col = res
+            game.select(row, col)
+
 
         game.update()
         clock.tick(FPS)
